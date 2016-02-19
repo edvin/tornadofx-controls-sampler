@@ -1,0 +1,11 @@
+.sample-content {
+    -fx-padding: 20;
+}
+
+.split-pane {
+    -fx-border-color: transparent;
+}
+
+.content {
+    -fx-padding: 20;
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.web.WebView?>
+<?import no.tornado.sampler.ControlSampleCellFactory?>
+<BorderPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" prefWidth="1200" fx:controller="no.tornado.sampler.MainController">
+    <left>
+        <TreeView fx:id="sampleTree">
+            <cellFactory><ControlSampleCellFactory/></cellFactory>
+        </TreeView>
+    </left>
+    <center>
+        <TabPane fx:id="tabs">
+            <Tab text="Sample" fx:id="sampleTab" closable="false"/>
+
+            <Tab text="Documentation" fx:id="docsTab" closable="false">
+                <WebView fx:id="docsView"/>
+            </Tab>
+
+            <Tab text="Source" fx:id="sourceTab" closable="false">
+              <WebView fx:id="sourceView"/>
+            </Tab>
+
+            <Tab text="CSS" fx:id="cssTab" closable="false">
+                <WebView fx:id="cssView"/>
+            </Tab>
+        </TabPane>
+    </center>
+</BorderPane>
