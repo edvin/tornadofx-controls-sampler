@@ -4,10 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.SplitPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -19,9 +16,9 @@ import tornadofx.control.NaviSelect;
 
 import static javafx.scene.control.Alert.AlertType.INFORMATION;
 
-public class NaviSelectSample implements ControlSample {
+public class NaviSelectSample extends ControlSample {
 
-	public Node panel() {
+	public Node createPanel() {
 		Form form = new Form();
 		form.getStyleClass().add("content");
 		form.setPrefWidth(500);
@@ -40,7 +37,7 @@ public class NaviSelectSample implements ControlSample {
 		});
 
 		fieldset.field("Choose person:", navi);
-		return new SplitPane(form, new HBox(new Label("Info here")));
+		return form;
 	}
 
 	/**
@@ -68,12 +65,8 @@ public class NaviSelectSample implements ControlSample {
 		dialog.showAndWait();
 	}
 
-	public String name() {
-		return "NaviSelect";
-	}
-
 	public String getSourcePath() {
-		return "tornadofx/control/NaviSelect.java";
+		return "NaviSelectSample.java";
 	}
 
 	public String getDocsPath() {
@@ -81,6 +74,6 @@ public class NaviSelectSample implements ControlSample {
 	}
 
 	public String getCssPath() {
-		return "tornadofx/control/naviselect.css";
+		return null;
 	}
 }

@@ -9,3 +9,8 @@
 .content {
     -fx-padding: 20;
 }
+
+.header {
+    -fx-font-weight: bold;
+    -fx-font-size: 1.2em;
+}

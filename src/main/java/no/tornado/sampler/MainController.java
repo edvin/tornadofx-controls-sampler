@@ -2,11 +2,10 @@ package no.tornado.sampler;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.web.WebView;
+import no.tornado.sampler.samples.InlineHTMLSample;
 import no.tornado.sampler.samples.NaviSelectSample;
 
 import java.net.URL;
@@ -29,7 +28,7 @@ public class MainController implements Initializable {
 		sampleTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, selectedTreeItem) -> {
 			if (selectedTreeItem != null) {
 				ControlSample sample = selectedTreeItem.getValue();
-				sampleTab.setContent(sample.panel());
+				loadContent(sample);
 
 				if (tabs.getSelectionModel().getSelectedItem() == docsTab)
 					loadDocs(sample);
@@ -54,6 +53,16 @@ public class MainController implements Initializable {
 		}));
 	}
 
+	private void loadContent(ControlSample sample) {
+		Node panel = sample.panel();
+		Node info = sample.info();
+
+		if (info == null)
+			sampleTab.setContent(panel);
+		else
+			sampleTab.setContent(new SplitPane(panel, info));
+	}
+
 	private void loadSource(ControlSample sample) {
 		if (sample.getSourcePath() == null)
 			sourceView.getEngine().loadContent("<p>No sources for this sample.</p>");
@@ -76,9 +85,10 @@ public class MainController implements Initializable {
 	}
 
 	private TreeItem<ControlSample> sampleRoot() {
-		TreeItem<ControlSample> root = new TreeItem<>(new CategorySample("TornadoFX Controls"));
+		TreeItem<ControlSample> root = new TreeItem<>(new ControlSample("TornadoFX Controls") {});
 		root.setExpanded(true);
 		root.getChildren().add(new NaviSelectSample().treeItem());
+		root.getChildren().add(new InlineHTMLSample().treeItem());
 		return root;
 	}
 

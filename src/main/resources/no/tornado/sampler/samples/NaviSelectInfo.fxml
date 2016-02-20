@@ -1,0 +1,23 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import tornadofx.control.InlineHTML?>
+<VBox xmlns="http://javafx.com/javafx/null" spacing="10">
+    <padding>
+        <Insets top="15" bottom="15" left="15" right="15"/>
+    </padding>
+    <Label styleClass="header" text="NaviSelect"/>
+
+    <InlineHTML>
+        <![CDATA[
+        <body style="margin: 0; padding: 0">
+            <p>The NaviSelect is an alternative to a ComboBox in cases where there are (too)
+            many items to choose from, or you need a custom way of selecting an item. There is
+            also a button that can be used to navigate to the selected item.</p>
+
+            <p>The <code>editButton</code> and <code>gotoButton</code> does not have any functionality
+            by default, you need to create your own event handlers and update the value on change.
+        </body>
+        ]]>
+    </InlineHTML>
+</VBox>

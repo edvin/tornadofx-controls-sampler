@@ -1,0 +1,10 @@
+<?import tornadofx.control.InlineHTML?>
+<InlineHTML>
+<![CDATA[
+    <p>This text is plain HTML added directly to the <code>InlineHTML</code> element in the <code>FXML</code>.</p>
+
+    <p>You can use <i>any</i> <strong>formatting</strong> <span style="color: blue">you</span> <span style="color: red">want</span> and include images if you like.</p>
+
+    <p><img src="http://placekitten.com.s3.amazonaws.com/homepage-samples/408/287.jpg"/></p>
+]]>
+</InlineHTML>

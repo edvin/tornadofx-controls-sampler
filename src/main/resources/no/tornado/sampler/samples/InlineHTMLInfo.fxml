@@ -1,0 +1,22 @@
+<?import tornadofx.control.InlineHTML?>
+<InlineHTML>
+<![CDATA[
+    <h2>InlineHTML</h2>
+
+    <p>Embed HTML in your <code>FXML</code> views easily. Place an <code>InlineHTML</code> tag in your <code>FXML</code> and fill it with arbitrary markup.</p>
+
+    <p>Surround with CDATA tags so you don't need to worry about escaping.</p>
+
+    <p>This text is actually presented to you via the <code>InlineHTML</code> component.</p>
+
+    <p>Example:</p>
+
+<pre style="white-space: pre-wrap; background: #fff">
+<span style="color: purple">&lt;InlineHTML&gt;</span><br/>
+    &lt;![DATA[<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: blue">&lt;p&gt;</span>My arbitrary markup here!<span style="color: blue">&lt;/p&gt;</span><br/>
+    ]]&gt;<br/>
+<span style="color: purple">&lt/InlineHTML&gt;</span><br/>
+</pre>
+]]>
+</InlineHTML>
