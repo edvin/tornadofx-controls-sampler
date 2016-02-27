@@ -90,11 +90,11 @@ public class MainController implements Initializable {
 				"  <link rel=\"stylesheet\" href=\"http://codemirror.net/lib/codemirror.css\">\n" +
 				"  <script src=\"http://codemirror.net/lib/codemirror.js\"></script>\n" +
 				"  <script src=\"http://codemirror.net/mode/clike/clike.js\"></script>\n" +
+				"  <script src=\"http://codemirror.net/mode/xml/xml.js\"></script>\n" +
 				"</head>\n" +
 				"<body>\n");
 
-		for (int i = 0; i < sources.size(); i++) {
-			String sourceURL = sources.get(0);
+		for (String sourceURL : sources) {
 			String name = sourceURL.substring(sourceURL.lastIndexOf("/") + 1);
 
 			String code = downloadString(sourceURL);
@@ -106,9 +106,10 @@ public class MainController implements Initializable {
 
 		template.append("<script>\n" +
 			"  var textareas = document.getElementsByTagName('textarea');\n" +
-			"  var count = textareas.length;\n" +
-			"  for (var i = 0; i < count; i++) {\n" +
-			"    var textarea = textareas[i];\n" +
+			"  var editors = [];\n" +
+		    "  for (var i = 0; i < textareas.length; i++) editors.push(textareas[i]);\n" +
+			"  for (var i = 0; i < editors.length; i++) {\n" +
+			"    var textarea = editors[i];\n" +
 			"    CodeMirror.fromTextArea(textarea, { lineNumbers: true, matchBrackets: true, mode: 'text/x-' + textarea.dataset.mode });\n" +
 			" }\n" +
 			"</script>\n");
@@ -129,20 +130,6 @@ public class MainController implements Initializable {
 		} catch (Exception ex) {
 			return String.format("Unable to extract data from %s: %s", sourceURL, ex.getMessage());
 		}
-	}
-
-	private void sendWebScrollToParent(ScrollPane root, WebView webView) {
-		EventDispatcher initial = webView.getEventDispatcher();
-
-		webView.setEventDispatcher((Event event, EventDispatchChain tail) -> {
-			if (event instanceof ScrollEvent) {
-				Event copy = event.copyFor(event.getSource(), root);
-				root.fireEvent(copy);
-				return copy;
-			} else {
-				return initial.dispatchEvent(event, tail);
-			}
-		});
 	}
 
 	private void loadDocs(ControlSample sample) {

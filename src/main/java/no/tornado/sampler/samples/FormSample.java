@@ -21,7 +21,7 @@ public class FormSample extends ControlSample {
 	}
 
 	public List<String> getSourcePaths() {
-		return Arrays.asList("FormSample.java", "FormSample.fxml");
+		return Arrays.asList("java/no/tornado/sampler/samples/FormSample.java", "resources/no/tornado/sampler/samples/FormSample.fxml");
 	}
 
 	public String getDocsPath() {

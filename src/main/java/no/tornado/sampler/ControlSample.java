@@ -67,7 +67,7 @@ public abstract class ControlSample {
 	}
 
 	public List<String> getSourceUrls() {
-		String base = "https://raw.githubusercontent.com/edvin/tornadofx-controls-sampler/master/src/main/java/no/tornado/sampler/samples/";
+		String base = "https://raw.githubusercontent.com/edvin/tornadofx-controls-sampler/master/src/main/";
 		return getSourcePaths().stream().map(s -> base + s).collect(Collectors.toList());
 	}
 
