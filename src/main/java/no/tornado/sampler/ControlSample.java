@@ -6,6 +6,9 @@ import javafx.scene.control.TreeItem;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class ControlSample {
 	private String name;
@@ -56,15 +59,16 @@ public abstract class ControlSample {
 	}
 
 	public String getDocsPath() { return null; }
-	public String getSourcePath() { return null; }
+	public List<String> getSourcePaths() { return Collections.emptyList(); }
 	public String getCssPath() { return null; }
 
 	public String getDocsUrl() {
 		return "https://edvin.github.io/tornadofx-controls/" + getDocsPath();
 	}
 
-	public String getSourceUrl() {
-		return "https://github.com/edvin/tornadofx-controls-sampler/blob/master/src/main/java/no/tornado/sampler/samples/" + getSourcePath();
+	public List<String> getSourceUrls() {
+		String base = "https://raw.githubusercontent.com/edvin/tornadofx-controls-sampler/master/src/main/java/no/tornado/sampler/samples/";
+		return getSourcePaths().stream().map(s -> base + s).collect(Collectors.toList());
 	}
 
 	public String getCssUrl() {

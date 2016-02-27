@@ -1,14 +1,23 @@
 package no.tornado.sampler;
 
+import javafx.event.Event;
+import javafx.event.EventDispatchChain;
+import javafx.event.EventDispatcher;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.web.WebView;
+import no.tornado.sampler.samples.FormSample;
 import no.tornado.sampler.samples.InlineHTMLSample;
 import no.tornado.sampler.samples.NaviSelectSample;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -19,7 +28,6 @@ public class MainController implements Initializable {
 	@FXML Tab sourceTab;
 	@FXML Tab cssTab;
 	@FXML WebView docsView;
-	@FXML WebView sourceView;
 	@FXML WebView cssView;
 
 	public void initialize(URL location, ResourceBundle resources) {
@@ -64,17 +72,84 @@ public class MainController implements Initializable {
 	}
 
 	private void loadSource(ControlSample sample) {
-		if (sample.getSourcePath() == null)
+		WebView sourceView = new WebView();
+
+		if (sample.getSourcePaths() == null) {
 			sourceView.getEngine().loadContent("<p>No sources for this sample.</p>");
-		else
-			sourceView.getEngine().load(sample.getSourceUrl());
+		} else {
+			sourceView.getEngine().loadContent(applyCodemirror(sample.getSourceUrls()));
+		}
+		sourceTab.setContent(sourceView);
+	}
+
+	private String applyCodemirror(List<String> sources) {
+		StringBuilder template = new StringBuilder(
+			"<!doctype html>\n" +
+				"<html>\n" +
+				"<head>\n" +
+				"  <link rel=\"stylesheet\" href=\"http://codemirror.net/lib/codemirror.css\">\n" +
+				"  <script src=\"http://codemirror.net/lib/codemirror.js\"></script>\n" +
+				"  <script src=\"http://codemirror.net/mode/clike/clike.js\"></script>\n" +
+				"</head>\n" +
+				"<body>\n");
+
+		for (int i = 0; i < sources.size(); i++) {
+			String sourceURL = sources.get(0);
+			String name = sourceURL.substring(sourceURL.lastIndexOf("/") + 1);
+
+			String code = downloadString(sourceURL);
+			String mode = name.endsWith(".java") ? "java" : "xml";
+
+			template.append(String.format("  <h2>%s</h2>\n", name));
+			template.append(String.format("  <textarea data-mode='%s'>%s</textarea>\n", mode, code));
+		}
+
+		template.append("<script>\n" +
+			"  var textareas = document.getElementsByTagName('textarea');\n" +
+			"  var count = textareas.length;\n" +
+			"  for (var i = 0; i < count; i++) {\n" +
+			"    var textarea = textareas[i];\n" +
+			"    CodeMirror.fromTextArea(textarea, { lineNumbers: true, matchBrackets: true, mode: 'text/x-' + textarea.dataset.mode });\n" +
+			" }\n" +
+			"</script>\n");
+
+		template.append("</body>\n</html>");
+
+		return template.toString();
+	}
+
+	private String downloadString(String sourceURL) {
+		try (InputStream input = (InputStream) new URL(sourceURL).getContent();
+		     BufferedReader reader = new BufferedReader(new InputStreamReader(input))) {
+			StringBuilder s = new StringBuilder();
+			String line;
+			while ((line = reader.readLine()) != null)
+				s.append(line).append("\n");
+			return s.toString().replace(">", "&gt;");
+		} catch (Exception ex) {
+			return String.format("Unable to extract data from %s: %s", sourceURL, ex.getMessage());
+		}
+	}
+
+	private void sendWebScrollToParent(ScrollPane root, WebView webView) {
+		EventDispatcher initial = webView.getEventDispatcher();
+
+		webView.setEventDispatcher((Event event, EventDispatchChain tail) -> {
+			if (event instanceof ScrollEvent) {
+				Event copy = event.copyFor(event.getSource(), root);
+				root.fireEvent(copy);
+				return copy;
+			} else {
+				return initial.dispatchEvent(event, tail);
+			}
+		});
 	}
 
 	private void loadDocs(ControlSample sample) {
 		if (sample.getDocsPath() == null)
 			docsView.getEngine().loadContent("<p>No documentation for this sample.</p>");
 		else
-			docsView.getEngine().load(sample.getSourceUrl());
+			docsView.getEngine().load(sample.getDocsUrl());
 	}
 
 	private void loadCSS(ControlSample sample) {
@@ -85,8 +160,10 @@ public class MainController implements Initializable {
 	}
 
 	private TreeItem<ControlSample> sampleRoot() {
-		TreeItem<ControlSample> root = new TreeItem<>(new ControlSample("TornadoFX Controls") {});
+		TreeItem<ControlSample> root = new TreeItem<>(new ControlSample("TornadoFX Controls") {
+		});
 		root.setExpanded(true);
+		root.getChildren().add(new FormSample().treeItem());
 		root.getChildren().add(new NaviSelectSample().treeItem());
 		root.getChildren().add(new InlineHTMLSample().treeItem());
 		return root;

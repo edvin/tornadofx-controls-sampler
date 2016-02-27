@@ -14,6 +14,9 @@ import tornadofx.control.Fieldset;
 import tornadofx.control.Form;
 import tornadofx.control.NaviSelect;
 
+import java.util.Collections;
+import java.util.List;
+
 import static javafx.scene.control.Alert.AlertType.INFORMATION;
 
 public class NaviSelectSample extends ControlSample {
@@ -65,8 +68,8 @@ public class NaviSelectSample extends ControlSample {
 		dialog.showAndWait();
 	}
 
-	public String getSourcePath() {
-		return "NaviSelectSample.java";
+	public List<String> getSourcePaths() {
+		return Collections.singletonList("NaviSelectSample.java");
 	}
 
 	public String getDocsPath() {
@@ -74,6 +77,6 @@ public class NaviSelectSample extends ControlSample {
 	}
 
 	public String getCssPath() {
-		return null;
+		return "tornadofx/control/naviselect.css";
 	}
 }

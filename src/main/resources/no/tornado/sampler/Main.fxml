@@ -19,7 +19,6 @@
             </Tab>
 
             <Tab text="Source" fx:id="sourceTab" closable="false">
-              <WebView fx:id="sourceView"/>
             </Tab>
 
             <Tab text="CSS" fx:id="cssTab" closable="false">
